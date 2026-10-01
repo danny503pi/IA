@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Náhuat Vivo</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Fuentes e íconos libres de Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Contenedor general adaptado a pantalla móvil -->
+  <div class="mobile-container">
+    
+    <!-- Encabezado superior fijo -->
+    <header class="app-header">
+      <div class="header-brand">
+        <div class="header-icon">🌿</div>
+        <div>
+          <h1 class="header-title">Náhuat Vivo</h1>
+          <p class="header-subtitle" id="headerSubtitle">Catálogo y Buscador Bilingüe</p>
+        </div>
+      </div>
+      <div class="header-badge" id="favCountBadge" title="Palabras en lista de repaso">0 ⭐</div>
+    </header>
+
+    <!-- Contenido dinámico según la pestaña activa -->
+    <main class="app-content">
+
+      <!-- ================= PESTAÑA 1: CATÁLOGO ================= -->
+      <section id="viewCatalog" class="view-section active">
+        <!-- Barra de búsqueda rápida -->
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input 
+            type="text" 
+            id="searchInput" 
+            placeholder="Buscar en Náhuat o Español..." 
+            autocomplete="off"
+            spellcheck="false"
+          >
+          <button id="clearSearchBtn" class="clear-btn" style="display: none;" title="Limpiar búsqueda">✕</button>
+        </div>
+
+        <!-- Filtros horizontales por categoría -->
+        <div class="categories-scroll" id="categoriesContainer">
+          <!-- Se inyectan dinámicamente con JavaScript -->
+        </div>
+
+        <!-- Indicador de total de resultados -->
+        <div class="results-meta">
+          <span id="resultsCount">Cargando vocabulario...</span>
+        </div>
+
+        <!-- Lista de tarjetas de vocabulario -->
+        <div class="cards-list" id="vocabularyList">
+          <!-- Inyectado vía JavaScript -->
+        </div>
+      </section>
+
+      <!-- ================= PESTAÑA 2: FAVORITOS / REPASO ================= -->
+      <section id="viewFavorites" class="view-section">
+        <!-- Banner de llamada a la acción si hay favoritos -->
+        <div id="favoritesBanner" class="fav-banner">
+          <div>
+            <h3>Mazo de Repaso Activo</h3>
+            <p id="favBannerText">Tienes palabras listas para practicar.</p>
+          </div>
+          <button id="btnStartPracticeFromFavs" class="btn-primary">Repasar</button>
+        </div>
+
+        <!-- Lista de palabras guardadas -->
+        <div class="cards-list" id="favoritesList">
+          <!-- Inyectado vía JavaScript -->
+        </div>
+
+        <!-- Estado vacío cuando no hay favoritos -->
+        <div id="emptyFavorites" class="empty-state" style="display: none;">
+          <div class="empty-icon">⭐</div>
+          <h3>Tu lista de repaso está vacía</h3>
+          <p>Toca la estrella en cualquier palabra del catálogo para guardarla aquí y repasarla con las tarjetas.</p>
+          <button id="btnGoToCatalog" class="btn-secondary">Explorar Catálogo</button>
+        </div>
+      </section>
+
+      <!-- ================= PESTAÑA 3: TARJETAS DE REPASO (FLASHCARDS) ================= -->
+      <section id="viewFlashcards" class="view-section">
+        <!-- Controles superiores de la sesión -->
+        <div class="flashcards-topbar">
+          <div>
+            <span class="deck-counter" id="cardProgressText">Tarjeta 1 de 5</span>
+            <span class="deck-mode-badge" id="cardDeckModeBadge">Mazo: Favoritos</span>
+          </div>
+          <div class="topbar-actions">
+            <button id="btnShuffle" class="icon-button" title="Mezclar tarjetas">🔀</button>
+            <button id="btnRestartSession" class="icon-button" title="Reiniciar mazo">🔄</button>
+          </div>
+        </div>
+
+        <!-- Barra de progreso visual -->
+        <div class="progress-track">
+          <div class="progress-bar" id="deckProgressBar" style="width: 20%;"></div>
+        </div>
+
+        <!-- Tarjeta 3D interactiva (Click para girar) -->
+        <div class="flashcard-container" id="flashcardElement" title="Haz clic o toca para voltear">
+          <div class="flashcard-inner" id="flashcardInner">
+            
+            <!-- Cara Frente (Náhuat) -->
+            <div class="flashcard-face flashcard-front">
+              <span class="card-category" id="cardFrontCategory">Saludos</span>
+              <div class="card-center">
+                <h2 class="card-word" id="cardFrontWord">Yeyek tunal</h2>
+                <p class="card-phonetic" id="cardFrontPhonetic">[yé-yek tú-nal]</p>
+              </div>
+              <p class="card-hint">👆 Toca para voltear y ver traducción</p>
+            </div>
+
+            <!-- Cara Reverso (Español y Contexto) -->
+            <div class="flashcard-face flashcard-back">
+              <span class="card-category card-category-es">Significado en Español</span>
+              <div class="card-center">
+                <h2 class="card-translation" id="cardBackWord">Buenos días</h2>
+                <div class="card-example" id="cardBackExampleContainer">
+                  <p class="example-nahuat" id="cardBackExampleNahuat">“Yeyek tunal, nupilawan!”</p>
+                  <p class="example-spanish" id="cardBackExampleSpanish">¡Buenos días, mis hijos!</p>
+                </div>
+              </div>
+              <p class="card-hint">🔄 Toca para ver en Náhuat</p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Botones de autoevaluación (Repasar vs ¡Ya me la sé!) -->
+        <div class="flashcard-actions">
+          <button id="btnMarkReview" class="btn-review">
+            <span>❌ Repasar más</span>
+          </button>
+          <button id="btnMarkKnown" class="btn-known">
+            <span>✅ ¡Ya me la sé!</span>
+          </button>
+        </div>
+
+        <!-- Botones de navegación manual -->
+        <div class="flashcard-navigation">
+          <button id="btnPrevCard" class="nav-btn" title="Tarjeta anterior">◀ Anterior</button>
+          <button id="btnFlipCard" class="nav-btn nav-btn-outline" title="Voltear tarjeta">🔄 Voltear</button>
+          <button id="btnNextCard" class="nav-btn" title="Siguiente tarjeta">Siguiente ▶</button>
+        </div>
+
+        <!-- Pantalla de resumen final cuando se terminan las tarjetas -->
+        <div id="deckFinishedView" class="finished-modal" style="display: none;">
+          <div class="finished-card">
+            <div class="finished-icon">🎉</div>
+            <h2>¡Sesión Completada!</h2>
+            <p id="finishedSubtitle">Repasaste todas las tarjetas del mazo.</p>
+
+            <div class="score-grid">
+              <div class="score-box known">
+                <span class="score-number" id="scoreKnown">0</span>
+                <span class="score-label">Dominadas</span>
+              </div>
+              <div class="score-box review">
+                <span class="score-number" id="scoreReview">0</span>
+                <span class="score-label">Por repasar</span>
+              </div>
+            </div>
+
+            <button id="btnFinishedRestart" class="btn-primary full-width">Repasar de nuevo</button>
+            <button id="btnFinishedAll" class="btn-secondary full-width">Practicar con todo el catálogo</button>
+          </div>
+        </div>
+
+        <!-- Estado vacío para flashcards si no hay guardados -->
+        <div id="emptyFlashcards" class="empty-state" style="display: none;">
+          <div class="empty-icon">🎴</div>
+          <h3>Sin tarjetas en este mazo</h3>
+          <p>No tienes palabras marcadas para repaso todavía. Puedes practicar con todo el vocabulario.</p>
+          <button id="btnPracticeAllFromEmpty" class="btn-primary">Practicar todo el vocabulario</button>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Barra de navegación inferior móvil -->
+    <nav class="bottom-nav">
+      <button class="nav-tab active" data-tab="catalog" id="tabCatalog">
+        <span class="tab-icon">📖</span>
+        <span class="tab-text">Catálogo</span>
+      </button>
+      <button class="nav-tab" data-tab="favorites" id="tabFavorites">
+        <span class="tab-icon">⭐</span>
+        <span class="tab-text">Favoritos</span>
+      </button>
+      <button class="nav-tab" data-tab="flashcards" id="tabFlashcards">
+        <span class="tab-icon">🎴</span>
+        <span class="tab-text">Repaso</span>
+      </button>
+    </nav>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

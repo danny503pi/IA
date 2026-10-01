@@ -1,0 +1,6 @@
+{
+  "name": "Náhuat Vivo",
+  "description": "App para aprender la lengua Náhuat con buscador de vocabulario, favoritos y tarjetas de repaso.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
